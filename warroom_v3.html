@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The $30 Pool — 2026 War Room</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+:root{
+  --bg:#090c10;--bg2:#101318;--bg3:#171b22;--bg4:#1e2330;
+  --border:#232835;--border2:#2d3548;
+  --text:#cdd6f0;--text2:#7a8baa;--text3:#3e4a60;
+  --accent:#4f8ef7;--accent2:#1a2d52;
+  --green:#3ecf6e;--green2:#0f2e1c;--green3:#1a4d2e;
+  --red:#f05252;--red2:#2e0f0f;
+  --amber:#f5a623;--amber2:#2e1c06;
+  --purple:#a78bfa;--purple2:#1f1540;
+  --cyan:#22d3ee;--cyan2:#082830;
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'IBM Plex Sans',sans-serif;
+  --radius:5px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:13px;min-height:100vh;}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-track{background:var(--bg2);}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+
+/* HEADER */
+header{
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  padding:0 1.4rem;display:flex;align-items:center;
+  justify-content:space-between;height:50px;
+  position:sticky;top:0;z-index:200;gap:1rem;
+}
+.logo{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--accent);
+  letter-spacing:.09em;text-transform:uppercase;white-space:nowrap;}
+.logo em{color:var(--text3);font-style:normal;font-weight:400;}
+.hdr-stats{display:flex;gap:1.2rem;align-items:center;flex-shrink:0;}
+.hs{display:flex;flex-direction:column;align-items:flex-end;gap:1px;}
+.hs-l{font-size:8.5px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;font-family:var(--mono);}
+.hs-v{font-family:var(--mono);font-size:14px;font-weight:600;}
+.hs-v.g{color:var(--green);}
+.hs-v.a{color:var(--amber);}
+.hs-v.c{color:var(--cyan);font-size:11px;}
+
+/* TOAST */
+#toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--green3);
+  border:1px solid var(--green);border-radius:var(--radius);padding:.5rem 1rem;
+  font-family:var(--mono);font-size:11px;color:var(--green);z-index:999;
+  opacity:0;transform:translateY(8px);transition:all .25s;pointer-events:none;}
+#toast.show{opacity:1;transform:translateY(0);}
+
+/* NAV */
+nav{background:var(--bg2);border-bottom:1px solid var(--border);
+  padding:0 1.4rem;display:flex;gap:0;overflow-x:auto;position:sticky;top:50px;z-index:199;}
+nav::-webkit-scrollbar{display:none;}
+.ntab{
+  padding:0 1rem;height:38px;display:flex;align-items:center;gap:5px;
+  font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.05em;
+  color:var(--text3);cursor:pointer;border:none;border-bottom:2px solid transparent;
+  background:none;white-space:nowrap;transition:color .12s,border-color .12s;
+}
+.ntab:hover{color:var(--text2);}
+.ntab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.ntab .nb{
+  background:var(--bg3);border:1px solid var(--border2);border-radius:3px;
+  padding:1px 5px;font-size:8.5px;font-weight:600;
+}
+.ntab.active .nb{background:var(--accent2);border-color:var(--accent);color:var(--accent);}
+
+/* MAIN */
+main{padding:1.1rem 1.4rem;max-width:1480px;}
+
+/* KEPT BAR */
+.kept-bar{
+  background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);
+  padding:.55rem .85rem;margin-bottom:.75rem;font-size:11px;color:var(--text2);line-height:1.75;
+}
+.kept-bar strong{color:var(--red);font-size:8.5px;text-transform:uppercase;
+  letter-spacing:.1em;font-weight:600;margin-right:5px;font-family:var(--mono);}
+.kn{color:var(--text);}
+.ko{color:var(--text3);font-family:var(--mono);font-size:9.5px;}
+
+/* MARKET NOTE */
+.mkt{border-left:2px solid var(--accent);padding:.4rem .75rem;margin-bottom:.75rem;
+  font-size:11.5px;color:var(--text2);line-height:1.55;}
+
+/* TABLE */
+.tw{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1.25rem;}
+table{width:100%;border-collapse:collapse;}
+thead tr{background:var(--bg3);}
+th{padding:6px 7px;text-align:left;font-family:var(--mono);font-size:9px;font-weight:500;
+  color:var(--text3);letter-spacing:.09em;text-transform:uppercase;
+  border-bottom:1px solid var(--border);white-space:nowrap;}
+td{padding:7px 7px;border-bottom:1px solid var(--border);vertical-align:top;font-size:12px;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(79,142,247,.035);}
+.t1 td:first-child{border-left:3px solid var(--purple);}
+.t2 td:first-child{border-left:3px solid var(--accent);}
+.t3 td:first-child{border-left:3px solid var(--border2);}
+.pn{font-weight:500;color:var(--text);}
+.tm{font-family:var(--mono);font-size:9.5px;color:var(--text3);}
+.mono{font-family:var(--mono);}
+.note-cell{font-size:11px;color:var(--text2);line-height:1.4;white-space:normal;max-width:340px;}
+.lp{color:var(--green);font-weight:500;font-family:var(--mono);}
+.ln{color:var(--red);font-weight:500;font-family:var(--mono);}
+.lu{color:var(--text3);font-family:var(--mono);}
+.xv{font-family:var(--mono);font-weight:600;color:var(--cyan);}
+
+/* PILLS */
+.pill{display:inline-block;font-family:var(--mono);font-size:8.5px;font-weight:700;
+  padding:2px 6px;border-radius:3px;letter-spacing:.05em;white-space:nowrap;}
+.buy{background:var(--green2);color:var(--green);border:1px solid var(--green3);}
+.tgt{background:var(--purple2);color:var(--purple);border:1px solid #3a2880;}
+.sol{background:var(--accent2);color:var(--accent);border:1px solid #1e3a7a;}
+.dep{background:var(--bg3);color:var(--text3);border:1px solid var(--border);}
+.cau{background:var(--amber2);color:var(--amber);border:1px solid #4a2e08;}
+.hot{background:#1a1a2e;color:var(--cyan);border:1px solid var(--cyan2);}
+.watch{background:#1a1a1a;color:#888;border:1px solid #333;}
+
+/* EDITABLE NOTES */
+.edit-note{
+  font-size:11px;color:var(--text2);line-height:1.4;
+  white-space:pre-wrap;word-break:break-word;max-width:340px;
+  outline:none;cursor:text;border-radius:3px;padding:2px 4px;
+  transition:background .15s;min-width:80px;
+}
+.edit-note:focus{background:var(--bg4);color:var(--text);outline:1px solid var(--border2);}
+.edit-note:empty:before{content:attr(data-ph);color:var(--text3);font-style:italic;}
+.edit-badge{
+  display:inline-block;font-family:var(--mono);font-size:8px;
+  color:var(--text3);padding:1px 4px;border:1px solid var(--border);
+  border-radius:2px;margin-left:4px;cursor:pointer;
+  transition:color .12s,border-color .12s;
+}
+.edit-badge:hover{color:var(--amber);border-color:var(--amber);}
+
+/* PROSPECT CARDS */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:.8rem;margin-bottom:1.2rem;}
+.pcard{
+  background:var(--bg2);border:1px solid var(--border);border-radius:7px;
+  padding:.95rem;position:relative;overflow:hidden;
+}
+.pcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--green),var(--accent));}
+.pc-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.pc-meta{font-family:var(--mono);font-size:9.5px;color:var(--text3);
+  margin-bottom:.7rem;display:flex;gap:8px;flex-wrap:wrap;}
+.pc-meta span{color:var(--accent);}
+.pc-stat{display:flex;justify-content:space-between;padding:3px 0;
+  border-bottom:1px solid var(--border);font-size:11px;}
+.pc-stat:last-of-type{border-bottom:none;}
+.pc-stat .sl{color:var(--text3);font-size:9.5px;text-transform:uppercase;
+  letter-spacing:.06em;font-family:var(--mono);}
+.pc-stat .sv{font-family:var(--mono);font-weight:600;color:var(--green);}
+.pc-action{margin-top:.7rem;padding:.35rem .6rem;background:var(--green2);
+  border:1px solid var(--green3);border-radius:4px;font-family:var(--mono);
+  font-size:9.5px;font-weight:700;color:var(--green);text-align:center;letter-spacing:.05em;}
+
+/* WAIVER GRID */
+.wgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.8rem;margin-bottom:1.2rem;}
+.wcard{background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:.9rem;}
+.wc-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.5rem;}
+.wc-name{font-size:13px;font-weight:600;color:var(--text);}
+.wc-tm{font-family:var(--mono);font-size:9.5px;color:var(--text3);margin-top:1px;}
+.wc-eta{font-family:var(--mono);font-size:9.5px;padding:2px 7px;border-radius:3px;font-weight:700;}
+.eta-now{background:var(--green2);color:var(--green);border:1px solid var(--green3);}
+.eta-q1{background:var(--accent2);color:var(--accent);border:1px solid #1e3a7a;}
+.eta-q2{background:var(--amber2);color:var(--amber);border:1px solid #4a2e08;}
+.wc-stats{display:flex;gap:.8rem;margin-bottom:.6rem;flex-wrap:wrap;}
+.wc-s{display:flex;flex-direction:column;gap:1px;}
+.wc-s .wsl{font-size:8.5px;color:var(--text3);text-transform:uppercase;
+  letter-spacing:.06em;font-family:var(--mono);}
+.wc-s .wsv{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--cyan);}
+.wc-note{font-size:11px;color:var(--text2);line-height:1.4;}
+.wc-signal{display:flex;gap:4px;align-items:center;margin-bottom:.5rem;flex-wrap:wrap;}
+
+/* SECTION HEADERS */
+.sec-hdr{
+  font-family:var(--mono);font-size:9.5px;font-weight:600;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--text3);padding:.5rem 0 .4rem;
+  margin-bottom:.5rem;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:7px;
+}
+.sec-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+
+/* BREAKOUT FRAMEWORK */
+.bflex{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:1rem;}
+.bcard{background:var(--bg2);border:1px solid var(--border);border-radius:7px;
+  padding:.85rem;flex:1;min-width:230px;}
+.bc-name{font-size:13px;font-weight:600;color:var(--text);}
+.bc-sub{font-family:var(--mono);font-size:9.5px;color:var(--text3);margin-bottom:.5rem;}
+.sbar{display:flex;gap:3px;margin-bottom:4px;}
+.sd{width:9px;height:9px;border-radius:50%;background:var(--border2);}
+.sd.on{background:var(--green);}
+.slab{font-family:var(--mono);font-size:8.5px;color:var(--text3);}
+.bc-stats2{display:flex;gap:.7rem;margin-bottom:.6rem;flex-wrap:wrap;}
+.bcs{display:flex;flex-direction:column;gap:1px;}
+.bcs .bl{font-size:8.5px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-family:var(--mono);}
+.bcs .bv{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--cyan);}
+.bc-note2{font-size:11px;color:var(--text2);line-height:1.4;}
+
+/* KEEPER SIGNALS */
+.krow{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:1rem;}
+.kcol{flex:1;min-width:220px;background:var(--bg2);border:1px solid var(--border);
+  border-radius:7px;padding:.85rem;}
+.kcol-hdr{font-family:var(--mono);font-size:9px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.1em;margin-bottom:.6rem;padding-bottom:.4rem;border-bottom:1px solid var(--border);}
+.kr{padding:5px 0;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:2px;}
+.kr:last-child{border-bottom:none;}
+.kr-name{font-weight:500;color:var(--text);font-size:12px;}
+.kr-meta{font-family:var(--mono);font-size:9.5px;color:var(--text3);}
+.kr-note{font-size:10.5px;color:var(--text2);line-height:1.35;}
+
+/* FOOTER */
+footer{margin-top:2rem;padding:.85rem 1.4rem;border-top:1px solid var(--border);
+  font-family:var(--mono);font-size:9.5px;color:var(--text3);
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;}
+
+@media(max-width:700px){
+  header{padding:0 .8rem;height:auto;padding-top:.5rem;padding-bottom:.5rem;flex-wrap:wrap;}
+  main{padding:.8rem;}
+  nav{padding:0 .8rem;top:0;position:static;}
+  .hdr-stats{gap:.8rem;}
+  .note-cell,.edit-note{max-width:160px;}
+}
+</style>
+</head>
+<body>
+
+<div id="toast">✓ Note saved</div>
+
+<header>
+  <div class="logo">The $30 Pool <em>// 2026 War Room</em></div>
+  <div class="hdr-stats">
+    <div class="hs"><div class="hs-l">Budget</div><div class="hs-v g">$260</div></div>
+    <div class="hs"><div class="hs-l">Keepers</div><div class="hs-v a">$102</div></div>
+    <div class="hs"><div class="hs-l">Buyouts</div><div class="hs-v a">$16</div></div>
+    <div class="hs"><div class="hs-l">Available</div><div class="hs-v g">$142</div></div>
+    <div class="hs"><div class="hs-l">Auction</div><div class="hs-v c">Mar 29 · 8PM ET</div></div>
+  </div>
+</header>
+
+<nav id="nav"></nav>
+<main id="main"></main>
+
+<footer>
+  <span>Statcast 2025 expected stats (300+ PA / 100+ BIP) · Teams from CBS roster files · Built Mar 25 2026</span>
+  <span style="color:var(--accent)">The $30 Pool · 12-team 5×5 Roto · $260 auction · Notes auto-save to browser</span>
+</footer>
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// NOTES PERSISTENCE via localStorage
+// ─────────────────────────────────────────────────────────────────────────────
+const STORE_KEY = 'warroom_notes_v2';
+let notes = {};
+try { notes = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch(e){}
+
+function saveNote(id, val) {
+  notes[id] = val;
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(notes)); } catch(e){}
+  showToast();
+}
+
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  clearTimeout(t._tid);
+  t._tid = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+function noteHTML(id, defaultText) {
+  const saved = notes[id];
+  const val = saved !== undefined ? saved : (defaultText || '');
+  const escaped = val.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return `<span
+    class="edit-note"
+    contenteditable="true"
+    data-id="${id}"
+    data-ph="Add your notes..."
+    oninput="saveNote('${id}',this.innerText.trim())"
+  >${escaped}</span>`;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────────────────────────────────────
+const TABS = ['C','1B','2B','3B','SS','OF','SP','RP','Waiver','Prospects','Keepers'];
+
+const POS_DATA = {
+C:{
+  kept:[
+    {n:"Cal Raleigh",o:"sean",tm:"SEA"},{n:"Samuel Basallo",o:"sean",tm:"BAL"},
+    {n:"Will Smith",o:"evan",tm:"LAD"},{n:"Willson Contreras",o:"evan",tm:"MIL"},
+    {n:"William Contreras",o:"evan",tm:"MIL"},{n:"Drake Baldwin",o:"spev",tm:"ATL"},
+    {n:"Hunter Goodman",o:"spev",tm:"COL"},{n:"Shea Langeliers",o:"sharon",tm:"ATH"},
+    {n:"Salvador Perez",o:"sherk",tm:"KC"},{n:"Adley Rutschman",o:"foster",tm:"BAL"},
+    {n:"Yainer Diaz",o:"slavens",tm:"HOU"},{n:"Gabriel Moreno",o:"slavens",tm:"ARI"},
+    {n:"Agustín Ramírez",o:"steve",tm:"MIA"},
+  ],
+  note:"C is the most stripped position — 13 keepers. Only 4 meaningful targets remain. Herrera (STL, elite xwOBA, platoon risk) and Jeffers (MIN, safe floor) are the clear pair. Dingler and Kirk are strong buy signals — both underperformed their xwOBA by .025+.",
+  players:[
+    {n:"Iván Herrera",tm:"STL",w:.365,x:.371,lk:-.006,pw:-.027,pa:452,t:1,pl:"tgt",nt:"Best available C by xwOBA (.371 — top-5 catcher talent). Platoon-limited in 2025 (452 PA). Full-time role in 2026 = SP1 catcher value."},
+    {n:"Ryan Jeffers",tm:"MIN",w:.333,x:.325,lk:+.008,pw:-.003,pa:464,t:1,pl:"tgt",nt:"Safest floor. Skill-accurate (.325 xwOBA), everyday MIN starter. 20 HR profile."},
+    {n:"Dillon Dingler",tm:"DET",w:.326,x:.351,lk:-.025,pw:-.050,pa:469,t:2,pl:"buy",nt:"xwOBA .351 — underperformed -.025 (power -.050 SLG gap). DET full-time starter. Skills support a .335+ season."},
+    {n:"Alejandro Kirk",tm:"TOR",w:.334,x:.359,lk:-.025,pw:-.059,pa:506,t:2,pl:"buy",nt:"xwOBA .359 — top-3 C skills, underperformed -.025 (power -.059). Platoon concern vs LHP."},
+    {n:"Ben Rice",tm:"NYY",w:.358,x:.394,lk:-.036,pw:-.058,pa:530,t:2,pl:"buy",nt:"C/1B eligible. xwOBA .394 — massively underperformed (-.036, power -.058). NYY PT is the question; skills are elite if he's starting."},
+    {n:"Victor Caratini",tm:"MIN",w:.318,x:.329,lk:-.011,pa:386,t:3,pl:"dep",nt:"Confirmed MIN (2-yr). Average skills. Split time with Jeffers possible — verify starts."},
+  ]
+},
+'1B':{
+  kept:[
+    {n:"Pete Alonso",o:"nolan",tm:"BAL"},{n:"Michael Busch",o:"cary",tm:"CHC"},
+    {n:"Jonathan Aranda",o:"jonnyj",tm:"TB"},{n:"Nick Kurtz",o:"jonnyj",tm:"ATH"},
+    {n:"Bryce Harper",o:"spev",tm:"PHI"},{n:"Rafael Devers",o:"sherk",tm:"SF"},
+    {n:"Josh Naylor",o:"steve",tm:"SEA"},{n:"Vinnie Pasquantino",o:"sharon",tm:"KC"},
+    {n:"Kyle Schwarber",o:"steve",tm:"PHI"},
+  ],
+  note:"Schwarber KEPT by steve — NOT available. Guerrero Jr. is now the clear #1 1B target. Freeman is a statistical buy (power luck +.035). Position is thinner than it looks without Schwarber.",
+  players:[
+    {n:"Vladimir Guerrero Jr.",tm:"TOR",w:.366,x:.384,lk:-.018,pw:-.039,pa:680,t:1,pl:"tgt",nt:"Best available 1B. xwOBA .384, underperformed -.018 (power -.039). TOR extension. 30+ HR / .290 BA profile."},
+    {n:"Freddie Freeman",tm:"LAD",w:.370,x:.350,lk:+.020,pw:+.035,pa:627,t:1,pl:"buy",nt:"BUY — power underperformed +.035 SLG gap. Full Achilles recovery expected. Dodger lineup = premier run environment."},
+    {n:"Matt Olson",tm:"ATL",w:.366,x:.360,lk:+.006,pw:-.008,pa:724,t:2,pl:"tgt",nt:"Career-best barrel%/hard-hit% suppressed by HR/FB luck. xwOBA .360 — 35 HR talent. 724 PA sample is gold."},
+    {n:"Max Muncy",tm:"LAD",w:.366,x:.374,lk:-.008,pw:-.027,pa:388,t:2,pl:"sol",nt:"xwOBA .374 elite — only 388 PA (injury). Dodger lineup elite. Health is the only bet."},
+    {n:"Spencer Torkelson",tm:"DET",w:.339,x:.334,lk:+.005,pa:649,t:2,pl:"sol",nt:"Skill-neutral. 25 HR / improved contact. DET lineup upgraded with Valdez."},
+    {n:"Tyler Soderstrom",tm:"ATH",w:.354,x:.341,lk:+.013,pw:+.017,pa:624,t:2,pl:"sol",nt:"1B/OF eligible. xwOBA .341, age 23. Real power tool. ATH lineup weak for R/RBI."},
+  ]
+},
+'2B':{
+  kept:[
+    {n:"Ketel Marte",o:"sherk",tm:"ARI"},{n:"Brice Turang",o:"spev",tm:"MIL"},
+    {n:"Jackson Holliday",o:"evan",tm:"BAL"},{n:"Nico Hoerner",o:"slavens",tm:"CHC"},
+    {n:"Ceddanne Rafaela",o:"sharon",tm:"BOS"},{n:"Matt McLain",o:"nolan",tm:"CIN"},
+    {n:"Bobby Witt Jr.",o:"eli",tm:"KC"},
+  ],
+  note:"Thinnest position at auction. Chisholm is the only elite target — everything else is a significant drop. Don't panic-overspend. A $5-8 fallback beats overpaying.",
+  players:[
+    {n:"Jazz Chisholm Jr.",tm:"NYY",w:.349,x:.346,lk:+.003,pw:0,pa:531,t:1,pl:"tgt",nt:"Only elite 2B available. xwOBA .346, luck-neutral. 28 HR / 31 SB confirmed by Statcast. Health only risk."},
+    {n:"Jorge Polanco",tm:"SEA",w:.350,x:.343,lk:+.007,pw:+.031,pa:524,t:2,pl:"sol",nt:"Confirmed SEA. xwOBA .343, power luck +.031. Consistent 20 HR / .280 BA floor."},
+    {n:"Trea Turner",tm:"PHI",w:.352,x:.321,lk:+.031,pw:+.047,pa:639,t:2,pl:"cau",nt:"CAUTION — xwOBA only .321. The .352 wOBA and +.047 SLG gap were luck-driven. Buy for SB only."},
+    {n:"Dansby Swanson",tm:"CHC",w:.310,x:.345,lk:-.035,pw:-.060,pa:645,t:2,pl:"buy",nt:"SS/2B eligible. xwOBA .345 — significantly underperformed (-.035). Wrigley Field power upside."},
+    {n:"Brandon Lowe",tm:"PIT",w:.334,x:.335,lk:-.001,pa:553,t:3,pl:"dep",nt:"Confirmed PIT (traded from TB). Skill-accurate .335. 20 HR floor. PNC suppresses power."},
+    {n:"Jeff McNeil",tm:"DET",w:.324,x:.330,lk:-.006,pw:+.016,pa:462,t:3,pl:"dep",nt:"Confirmed DET (traded from NYM). Contact-first BA asset. Depth only."},
+  ]
+},
+'3B':{
+  kept:[
+    {n:"Junior Caminero",o:"eli",tm:"TB"},{n:"Maikel Garcia",o:"nolan",tm:"KC"},
+    {n:"Addison Barger",o:"jonnyj",tm:"TOR"},{n:"Caleb Durbin",o:"steve",tm:"BOS"},
+    {n:"Royce Lewis",o:"cary",tm:"MIN"},{n:"José Ramírez",o:"foster",tm:"CLE"},
+  ],
+  note:"Ramirez kept by foster. Machado is the clear best available. Bregman at Wrigley is a real park upgrade — pull-heavy LHB into a hitter-friendly park. Chapman and Riley provide depth.",
+  players:[
+    {n:"Manny Machado",tm:"SD",w:.341,x:.355,lk:-.014,pw:-.035,pa:678,t:1,pl:"tgt",nt:"Best available 3B. xwOBA .355 — underperformed -.014 (power -.035). Petco suppresses counting but the talent is elite. 678 PA sample."},
+    {n:"Alex Bregman",tm:"CHC",w:.356,x:.337,lk:+.019,pw:+.035,pa:495,t:1,pl:"tgt",nt:"Confirmed CHC 5yr/$175M. xwOBA .337. Wrigley = massive park upgrade for a pull-heavy LHB. Injury-limited 2025 (114 G) — full season projects 25 HR / 85 RBI."},
+    {n:"Jazz Chisholm Jr.",tm:"NYY",w:.349,x:.346,lk:+.003,pa:531,t:1,pl:"tgt",nt:"3B/2B eligible. 28 HR / 31 SB. Multi-position flexibility adds real value. See 2B tab."},
+    {n:"Matt Chapman",tm:"SF",w:.336,x:.340,lk:-.004,pw:+.013,pa:535,t:2,pl:"sol",nt:"Skill-accurate. Consistent 25 HR / elite defense. Oracle Park suppresses power but floor is reliable."},
+    {n:"Brett Baty",tm:"NYM",w:.324,x:.334,lk:-.010,pw:-.022,pa:432,t:2,pl:"sol",nt:"xwOBA .334, underperformed -.010. Age 25. NYM lineup (Soto/Bichette/Lindor) elite for R/RBI."},
+    {n:"Austin Riley",tm:"ATL",w:.318,x:.330,lk:-.012,pw:-.044,pa:447,t:2,pl:"sol",nt:"Power significantly unlucky (-.044 SLG). Career-best barrel%. Buy-low on 30 HR skills."},
+  ]
+},
+SS:{
+  kept:[
+    {n:"Bobby Witt Jr.",o:"eli",tm:"KC"},{n:"Geraldo Perdomo",o:"cary",tm:"ARI"},
+    {n:"Zach Neto",o:"sharon",tm:"LAA"},{n:"Gunnar Henderson",o:"nolan",tm:"BAL"},
+    {n:"Elly De La Cruz",o:"sharon",tm:"CIN"},{n:"CJ Abrams",o:"eli",tm:"WAS"},
+    {n:"Willy Adames",o:"steve",tm:"SF"},
+  ],
+  note:"Witt kept by eli. Tatis Jr. is the best available SS. Bichette is NYM playing 3B — verify SS eligibility before bidding here. Lindor is the safe floor bet.",
+  players:[
+    {n:"Fernando Tatis Jr.",tm:"SD",w:.353,x:.370,lk:-.017,pw:-.042,pa:691,t:1,pl:"tgt",nt:"Best available SS. xwOBA .370, underperformed -.017. True 30/25 upside. 691 PA large sample."},
+    {n:"Francisco Lindor",tm:"NYM",w:.350,x:.345,lk:+.005,pw:+.012,pa:732,t:1,pl:"tgt",nt:"Skill-accurate. xwOBA .345, 732 PA durability. NYM lineup with Soto/Bichette/Semien = elite R/RBI."},
+    {n:"Bo Bichette",tm:"NYM",w:.361,x:.353,lk:+.008,pw:+.010,pa:628,t:2,pl:"sol",nt:"Confirmed NYM 3yr/$126M. Playing 3B in 2026 — verify SS eligibility. NYM lineup elite for counting stats."},
+    {n:"Jeremy Peña",tm:"HOU",w:.363,x:.334,lk:+.029,pw:+.045,pa:543,t:2,pl:"cau",nt:"Positive luck gap (+.029 wOBA, +.045 SLG) — results overstated skills. xwOBA .334 is solid not elite."},
+    {n:"J.P. Crawford",tm:"SEA",w:.322,x:.329,lk:-.007,pa:654,t:3,pl:"dep",nt:"Skill-accurate. Elite OBP, below-average power. BA asset. Depth SS only."},
+    {n:"Carlos Correa",tm:"MIN",w:.322,x:.338,lk:-.016,pw:-.037,pa:584,t:3,pl:"dep",nt:"xwOBA .338, underperformed -.016. Injury history the concern. Health gamble on .320+ / 20 HR."},
+  ]
+},
+OF:{
+  kept:[
+    {n:"Aaron Judge",o:"nolan",tm:"NYY"},{n:"Ronald Acuña Jr.",o:"evan",tm:"ATL"},
+    {n:"Kyle Tucker",o:"evan",tm:"LAD"},{n:"George Springer",o:"jonnyj",tm:"TOR"},
+    {n:"Kyle Stowers",o:"jonnyj",tm:"MIA"},{n:"Corbin Carroll",o:"cary",tm:"ARI"},
+    {n:"Jo Adell",o:"evan",tm:"LAA"},{n:"Trent Grisham",o:"sherk",tm:"NYY"},
+    {n:"James Wood",o:"sean",tm:"WAS"},{n:"Jackson Merrill",o:"sean",tm:"SD"},
+    {n:"Jarren Duran",o:"foster",tm:"BOS"},{n:"Jackson Chourio",o:"eli",tm:"MIL"},
+    {n:"Wyatt Langford",o:"steve",tm:"TEX"},{n:"Steven Kwan",o:"steve",tm:"CLE"},
+    {n:"Randy Arozarena",o:"eli",tm:"SEA"},{n:"Taylor Ward",o:"sherk",tm:"BAL"},
+    {n:"Cody Bellinger",o:"slavens",tm:"NYY"},{n:"Pete Crow-Armstrong",o:"evan",tm:"CHC"},
+    {n:"Andy Pages",o:"slavens",tm:"LAD"},{n:"Brent Rooker",o:"sherk",tm:"ATH"},
+    {n:"Byron Buxton",o:"nolan",tm:"MIN"},{n:"Chandler Simpson",o:"sherk",tm:"TB"},
+    {n:"Michael Harris",o:"spev",tm:"ATL"},{n:"Julio Rodríguez",o:"slavens",tm:"SEA"},
+  ],
+  note:"OF heavily stripped — 24 keepers. Tucker AND Julio both kept. Ohtani and Soto are the clear elite targets. Soto's xwOBA .429 is the highest in the entire dataset. Position gets thin fast after the top 5.",
+  players:[
+    {n:"Shohei Ohtani",tm:"LAD",w:.418,x:.425,lk:-.007,pw:-.027,pa:727,t:1,pl:"tgt",nt:"Best player available. xwOBA .425, slightly underperformed. 5-cat elite contributor. Pay maximum."},
+    {n:"Juan Soto",tm:"NYM",w:.390,x:.429,lk:-.039,pw:-.083,pa:715,t:1,pl:"buy",nt:"STRONG BUY. xwOBA .429 — highest in entire dataset. Underperformed 2025 by -.039 (power -.083). Market prices him on .390 results. True talent is the best available hitter."},
+    {n:"Fernando Tatis Jr.",tm:"SD",w:.353,x:.370,lk:-.017,pw:-.042,pa:691,t:1,pl:"tgt",nt:"OF/SS eligible. xwOBA .370, underperformed -.017. True 30/25 upside. See SS tab."},
+    {n:"Mookie Betts",tm:"LAD",w:.318,x:.330,lk:-.012,pw:-.016,pa:663,t:2,pl:"sol",nt:"xwOBA .330, underperformed -.012. Dodger lineup elite. Injury-limited 2025. Skills support bounce-back."},
+    {n:"Riley Greene",tm:"DET",w:.343,x:.335,lk:+.008,pw:-.001,pa:655,t:2,pl:"sol",nt:"xwOBA .335, luck-neutral. 28 HR bat with improving contact. DET lineup upgraded with Valdez."},
+    {n:"Alec Burleson",tm:"STL",w:.346,x:.345,lk:+.001,pw:-.012,pa:546,t:2,pl:"sol",nt:"Skill-accurate. xwOBA .345, 25 HR / good BA profile. Consistent STL starter."},
+    {n:"Ian Happ",tm:"CHC",w:.333,x:.354,lk:-.021,pw:-.037,pa:663,t:2,pl:"buy",nt:"BUY — xwOBA .354 vs wOBA .333, underperformed -.021 (power -.037). Wrigley + Bregman lineup protection."},
+    {n:"Seiya Suzuki",tm:"CHC",w:.343,x:.352,lk:-.009,pw:-.015,pa:651,t:2,pl:"sol",nt:"xwOBA .352, slight underperformance. Wrigley helps. Consistent 25 HR / .280 BA. FA after 2026."},
+    {n:"Mickey Moniak",tm:"LAA",w:.348,x:.337,lk:+.011,pw:+.021,pa:461,t:2,pl:"sol",nt:"Career breakout year. xwOBA .337 real. LAA lineup weak — limit R/RBI; buy for BA/HR."},
+    {n:"Wilyer Abreu",tm:"BOS",w:.334,x:.335,lk:-.001,pa:417,t:3,pl:"dep",nt:"Skill-accurate floor outfielder. Fenway good for power. Depth OF."},
+  ]
+},
+SP:{
+  kept:[
+    {n:"Max Fried",o:"sean",tm:"NYY"},{n:"Kevin Gausman",o:"sean",tm:"TOR"},
+    {n:"Parker Messick",o:"sean",tm:"CLE"},{n:"Eury Perez",o:"sean",tm:"MIA"},
+    {n:"Emmet Sheehan",o:"sean",tm:"LAD"},{n:"Shane McClanahan",o:"sean",tm:"TB"},
+    {n:"Garrett Crochet",o:"foster",tm:"BOS"},{n:"Bryan Woo",o:"foster",tm:"SEA"},
+    {n:"Jeff Hoffman",o:"foster",tm:"TOR"},{n:"Joe Ryan",o:"foster",tm:"MIN"},
+    {n:"Cam Schlittler",o:"foster",tm:"NYY"},{n:"Trevor Rogers",o:"foster",tm:"BAL"},
+    {n:"Paul Skenes",o:"nolan",tm:"PIT"},{n:"Ranger Suarez",o:"nolan",tm:"BOS"},
+    {n:"Daniel Palencia",o:"nolan",tm:"CHC"},{n:"Cole Ragans",o:"jonnyj",tm:"KC"},
+    {n:"Chris Sale",o:"jonnyj",tm:"ATL"},{n:"Chase Burns",o:"jonnyj",tm:"CIN"},
+    {n:"Kyle Bradish",o:"jonnyj",tm:"BAL"},{n:"Jacob deGrom",o:"eli",tm:"TEX"},
+    {n:"Nick Pivetta",o:"eli",tm:"SD"},{n:"Logan Gilbert",o:"sherk",tm:"SEA"},
+    {n:"Logan Webb",o:"sherk",tm:"SF"},{n:"Tarik Skubal",o:"sharon",tm:"DET"},
+    {n:"Shota Imanaga",o:"sharon",tm:"CHC"},{n:"Brandon Woodruff",o:"evan",tm:"MIL"},
+    {n:"Hunter Brown",o:"evan",tm:"HOU"},{n:"Cade Horton",o:"evan",tm:"CHC"},
+    {n:"Tanner Bibee",o:"spev",tm:"CLE"},{n:"Jack Flaherty",o:"spev",tm:"DET"},
+    {n:"Nick Lodolo",o:"spev",tm:"CIN"},{n:"Spencer Strider",o:"spev",tm:"ATL"},
+    {n:"Yoshinobu Yamamoto",o:"steve",tm:"LAD"},{n:"Drew Rasmussen",o:"steve",tm:"TB"},
+    {n:"Grayson Rodriguez",o:"slavens",tm:"LAA"},{n:"Jesus Luzardo",o:"slavens",tm:"PHI"},
+    {n:"Matthew Boyd",o:"slavens",tm:"CHC"},{n:"Kris Bubic",o:"slavens",tm:"KC"},
+    {n:"Nolan McLean",o:"cary",tm:"NYM"},{n:"Nathan Eovaldi",o:"cary",tm:"TEX"},
+    {n:"Edward Cabrera",o:"cary",tm:"CHC"},{n:"Jacob Misiorowski",o:"cary",tm:"MIL"},
+    {n:"Cristopher Sanchez",o:"cary",tm:"PHI"},
+  ],
+  note:"Rotation heavily kept. Wheeler and Cease are the headline available starters. Sonny Gray (confirmed BOS $31M) is the most undervalued name — ERA 4.30 hides xFIP 2.89 over 2 years. Gore (TEX) is the Crochet-type breakout bet.",
+  players:[
+    {n:"Zack Wheeler",tm:"PHI",era:2.71,xera:2.49,gap:+.22,k:30.5,bb:5.8,fip:2.88,t:1,pl:"tgt",nt:"Best available SP. xERA 2.49, K% 30.5% with only 5.8% BB — best K-BB of any available starter. 141 IP in 2025 — health is the only concern."},
+    {n:"Dylan Cease",tm:"TOR",era:4.55,xera:3.46,gap:+1.09,k:29.8,bb:9.2,fip:3.21,t:1,pl:"buy",nt:"STRONG BUY. ERA 4.55 is a lie. xERA 3.46, K% 29.8%, FIP 3.21. Largest ERA/xERA gap of any available starter. Buy aggressively."},
+    {n:"Sonny Gray",tm:"BOS",era:4.30,xera:3.24,gap:+1.06,k:27.1,bb:4.1,fip:3.24,t:1,pl:"buy",nt:"STRONG BUY. Confirmed BOS $31M. xFIP 2.89 ranked 5th in baseball over 2 years. Best K/BB in NL. ERA 4.30 = pure BABIP/strand luck. Room will pass. Don't."},
+    {n:"Hunter Greene",tm:"CIN",era:2.76,xera:3.05,gap:-.29,k:28.9,bb:7.2,fip:3.05,t:1,pl:"tgt",nt:"xERA 3.05 elite, K% 28.9%. Only 260 BIP due to injury. Top-5 SP upside if healthy full season."},
+    {n:"MacKenzie Gore",tm:"TEX",era:null,xera:null,gap:null,k:null,bb:null,fip:null,t:1,pl:"buy",nt:"BREAKOUT BET. Only starter with 3 pitches at 18%+ SwStr%. TEX defense ranked #1 DRS in 2025. Rangers traded 5 prospects to get him. Control (37% ball rate) is the risk."},
+    {n:"Tyler Glasnow",tm:"LAD",era:3.19,xera:3.33,gap:-.14,k:null,bb:null,fip:null,t:2,pl:"sol",nt:"Skill-accurate. Elite stuff when healthy. Dodger defense elite. Durability always the risk."},
+    {n:"Carlos Rodón",tm:"NYY",era:3.09,xera:3.36,gap:-.27,k:null,bb:null,fip:null,t:2,pl:"sol",nt:"Large 504 BIP sample. xERA 3.36 — solid SP3. 32 starts in 2025."},
+    {n:"Casey Mize",tm:"DET",era:3.87,xera:3.66,gap:+.21,k:null,bb:null,fip:null,t:2,pl:"sol",nt:"Best season of career. xERA 3.66, ERA slightly unlucky (+.21). DET pitching dev is real."},
+    {n:"Freddy Peralta",tm:"NYM",era:2.70,xera:3.43,gap:-.73,k:27.3,bb:8.8,fip:3.41,t:2,pl:"cau",nt:"CAUTION — confirmed NYM (traded from MIL). ERA 2.70 was lucky (-.73 gap). ERA will rise to 3.40-3.80 range."},
+  ]
+},
+RP:{
+  kept:[
+    {n:"Mason Miller",o:"eli",tm:"SD"},{n:"Jhoan Duran",o:"sharon",tm:"PHI"},
+    {n:"Devin Williams",o:"eli",tm:"NYM"},{n:"David Bednar",o:"sherk",tm:"NYY"},
+    {n:"Cade Smith",o:"jonnyj",tm:"CLE"},{n:"Daniel Palencia",o:"nolan",tm:"CHC"},
+    {n:"Bryan Abreu",o:"sharon",tm:"HOU"},{n:"Ryan Walker",o:"spev",tm:"SF"},
+    {n:"Aroldis Chapman",o:"nolan",tm:"BOS"},{n:"Edwin Díaz",o:"jonnyj",tm:"LAD"},
+  ],
+  note:"Edwin Díaz KEPT by jonnyj (LAD). Hader is the best available closer by skills. ⚠ TB has NO closer in 2026 — committee approach (Jax/Cleavinger/Uceta), saves will be scattered. Avoid bidding on TB relievers for saves. Luke Weaver (NYM closer, 2yr/$22M) is the best buy — ERA 3.62 hides xERA 2.96. Clase is the reliable floor. Fairbanks now closes for MIA (signed 1yr/$13M). TB has NO closer — pure committee (Jax, Cleavinger, Uceta) — TB saves have near-zero fantasy value in 2026.",
+  players:[
+    {n:"Josh Hader",tm:"HOU",era:2.05,xera:2.00,gap:+.05,k:null,bb:null,fip:null,t:1,pl:"tgt",nt:"Best available closer by skills. xERA 2.00, nearly perfect skill accuracy. HOU closer locked."},
+    {n:"Luke Weaver",tm:"NYM",era:3.62,xera:2.96,gap:+.66,k:null,bb:null,fip:null,t:1,pl:"buy",nt:"BUY — confirmed NYM closer (2yr/$22M). ERA 3.62 vs xERA 2.96 — skills support a dominant 2026. Best save value available."},
+    {n:"Emmanuel Clase",tm:"CLE",era:3.23,xera:3.14,gap:+.09,k:null,bb:null,fip:null,t:1,pl:"tgt",nt:"Skill-accurate. Elite cutter-based profile. CLE closer entrenched. Reliable 35+ save floor."},
+    {n:"Pete Fairbanks",tm:"MIA",era:2.83,xera:3.09,gap:-.26,k:null,bb:null,fip:null,t:2,pl:"tgt",nt:"Signed MIA 1yr/$13M — confirmed Marlins closer. 27 saves in 2025, 2.83 ERA / 1.04 WHIP. Rays declined his option; MIA gets a legit closer."},
+    {n:"Raisel Iglesias",tm:"ATL",era:3.21,xera:3.14,gap:+.07,k:null,bb:null,fip:null,t:2,pl:"sol",nt:"Confirmed ATL (1yr/$16M). Skill-accurate. Established closer."},
+    {n:"Jeremiah Estrada",tm:"SD",era:3.45,xera:2.76,gap:+.69,k:null,bb:null,fip:null,t:2,pl:"buy",nt:"ERA 3.45 vs xERA 2.76 (+.69 gap). If in save role for SD, skills support dominance. Verify role."},
+    {n:"Kyle Finnegan",tm:"WSH",era:3.47,xera:3.16,gap:+.31,k:null,bb:null,fip:null,t:2,pl:"sol",nt:"ERA slightly unlucky (+.31). xERA 3.16. WSH closer role. Under-the-radar late value."},
+  ]
+}
+};
+
+// WAIVER WIRE DATA - sourced from CBS Sports, FantasyPros, MLB Pipeline Mar 25 2026
+const WAIVER_DATA = {
+  hitters:[
+    {n:"Konnor Griffin",tm:"PIT",pos:"SS/OF",eta:"now",eta_cls:"eta-now",
+     stats:[["Rank","#1 MLB Pipeline"],["2025 MiLB","20 HR / 60 SB — only 20/60 since 1980s"],["Level","Double-A → ETA May 2026"]],
+     sigs:["tgt","Avg-A"], note:"Baseball's #1 prospect. Linebacker build, does everything. 20/60 season in 2025 is historically unprecedented. ETA May. Pittsburgh will call him up when roster allows.",
+     signals:3},
+    {n:"JJ Wetherholt",tm:"STL",pos:"2B",eta:"now",eta_cls:"eta-now",
+     stats:[["Spring","Opening Day 2B"],["Profile","65-grade hit tool"],["ETA","Opening Day 2026"]],
+     sigs:["tgt"], note:"Confirmed Opening Day 2B for STL. 65-grade hit tool. Immediate NL ROY candidate. Add now if available.",
+     signals:3},
+    {n:"Cole Young",tm:"SEA",pos:"2B",eta:"now",eta_cls:"eta-now",
+     stats:[["Spring 2026",".302/.373/.717, 6 HR, 3 SB"],["Role","Projected SEA 2B"],["Profile","Good hit tool, power emerging"]],
+     sigs:["sol"], note:"Crushing spring (.717 SLG, 6 HR). Projected SEA starting 2B. May platoon but hit tool is real. Add if available.",
+     signals:2},
+    {n:"Colt Emerson",tm:"SEA",pos:"SS",eta:"q1",eta_cls:"eta-q1",
+     stats:[["Rank","#9 MLB Pipeline"],["Hit tool","65-grade"],["ETA","June 2026"]],
+     sigs:["sol"], note:"#9 overall prospect. 65-grade hit tool with burgeoning power. Took a big defensive step in 2025. Crawford is FA after 2026 — Emerson is the heir. Stash now.",
+     signals:2},
+    {n:"Max Clark",tm:"DET",pos:"OF",eta:"q2",eta_cls:"eta-q2",
+     stats:[["Rank","#10 MLB Pipeline"],["Nickname","Spark"],["ETA","July 2026"]],
+     sigs:["watch"], note:"#10 overall. Had a tough spring (sent to MiLB camp early) but the tools are elite. Power-speed combo with a vicious lefty swing. DET is rebuilding around him. Stash for July.",
+     signals:1},
+    {n:"Dylan Crews",tm:"WSH",pos:"OF",eta:"q1",eta_cls:"eta-q1",
+     stats:[["Status","Optioned to AAA"],["Spring issue","32% K rate, .103 AVG"],["ETA","May if adjusted"]],
+     sigs:["watch"], note:"Former top prospect optioned due to 32% K rate in spring. Too early to give up — the tools are undeniable. Monitor his AAA K rate. If it drops below 25%, he's worth picking up.",
+     signals:1},
+    {n:"Andrew Vaughn",tm:"MIL",pos:"1B/OF",eta:"now",eta_cls:"eta-now",
+     stats:[["Spring 2026",".372/1.030, 2 HR"],["xwOBA 2025",".349 — underperformed by -.038"],["Team","MIL — solid lineup"]],
+     sigs:["buy"], note:"Spring has been electric. His 2025 xwOBA (.349) was significantly better than actual results (-.038 gap). MIL is a good lineup. If available on your waiver wire, add him.",
+     signals:2},
+  ],
+  pitchers:[
+    {n:"Trey Yesavage",tm:"ATL",pos:"SP",eta:"q1",eta_cls:"eta-q1",
+     stats:[["Status","IL — shoulder impingement"],["2025 debut","Elite stuff, limited sample"],["ETA","Late April/May"]],
+     sigs:["buy"], note:"Elite stuff before IL stint. Should return by late April. ATL rotation could use him. Stash if your league allows IL holds.",
+     signals:2},
+    {n:"Max Meyer",tm:"MIA",pos:"SP",eta:"now",eta_cls:"eta-now",
+     stats:[["Spring 2026","7 IP, 50% K rate, 4% BB"],["Stuff","Former top-5 pick"],["Park","LoanDepot — pitcher friendly"]],
+     sigs:["buy"], note:"Pitching lights out in spring. Former top prospect finally showing the skills that got him drafted. 50% K rate in 7 spring IP with elite command. Add now.",
+     signals:3},
+    {n:"Bubba Chandler",tm:"PIT",pos:"SP",eta:"q1",eta_cls:"eta-q1",
+     stats:[["Rank","Top PIT prospect"],["Stuff","Plus FB + elite slider"],["ETA","May 2026"]],
+     sigs:["sol"], note:"Elite two-pitch mix. Slider is a wipeout offering. PIT will need rotation help — Chandler is ready. Stash before the call-up.",
+     signals:2},
+    {n:"Kyle Bradish",tm:"BAL",pos:"SP",eta:"now",eta_cls:"eta-now",
+     stats:[["Status","Kept by jonnyj — for reference"],["2025 return","2.89 xERA in 6 starts"],["SwStr%","15% — slider 21.7%, curve 23.4%"]],
+     sigs:["tgt"], note:"Already kept by jonnyj. Listed as a reference — if he's available anywhere this is a must-add. Post-TJ with near-elite stuff.",
+     signals:3},
+    {n:"Patrick Copen",tm:"LAD",pos:"SP",eta:"q2",eta_cls:"eta-q2",
+     stats:[["Status","LAD MiLB rotation"],["Stuff","TJ survivor, elite arsenal"],["ETA","Second half 2026"]],
+     sigs:["watch"], note:"BA highlighted as a 2026 breakout pitcher for the Dodgers. TJ survivor with elite stuff. LAD always develops arms. Watch list for H2 call-up.",
+     signals:1},
+  ]
+};
+
+// PROSPECTS (promote now)
+const PROSPECT_DATA = [
+  {n:"Kevin McGonigle",tm:"DET",pos:"SS/3B",sal:"$3M",contract:"M→Active",status:"OPENING DAY STARTER — TODAY",
+   stats:[["Prospect rank","#2 overall (CBS/MLB Pipeline)"],["2025 MiLB",".305/.408/.583 · More BB than K"],["2025 AFL",".362/.500/.710"],["Spring",".250/.423/.500 · 11 BB / 9 K in 52 PA"]],
+   action:"PROMOTE NOW — debuting TODAY vs SD",
+   note:"Baseball's #1 hitter prospect. More walks than strikeouts at every level. Skipped Triple-A. DET Opening Day SS. At $3M this is the steal of your roster."},
+  {n:"Carson Williams",tm:"TB",pos:"SS",sal:"$5M",contract:"M→Active",status:"OPENING DAY STARTER — TODAY",
+   stats:[["Prospect rank","#63 overall (MLB Pipeline)"],["2025 Triple-A","98 wRC+, 23 HR, 22 SB"],["Spring K%","20.8% (down from 41.5% debut)"],["Role","Starting SS — Taylor Walls on IL"]],
+   action:"PROMOTE NOW — starting today vs STL",
+   note:"Top Rays prospect, starting SS due to Walls oblique injury. Massive contact improvement this spring. Double-plus defense, plus power, plus speed. At $5M, promote immediately."},
+  {n:"Luke Keaschall",tm:"MIN",pos:"2B",sal:"$3M",contract:"Active",status:"ESTABLISHED MLB — CONFIRM ROSTER",
+   stats:[["2025 MLB",".302/.382/.445 in 49 games"],["2025 SB","14 stolen bases"],["AL POTW","Aug 4-10: .455, 2 HR, 10 RBI"],["2026 outlook","Named MIN top breakout candidate"]],
+   action:"CONFIRM on active roster — has MLB service time",
+   note:"Made his MLB debut in 2025, hit .302 in 49 games with 14 SB. Was listed as M in CBS but has MLB service time. Named AL Player of the Week. Confirm he's on your active 2026 roster."},
+];
+
+// KEEPERS
+const KEEPER_DATA = {
+  sean_rebound:[
+    {n:"Jackson Merrill",tm:"SD",x:.347,lk:-.016,note:"xwOBA .347 — underperformed -.016 due to injury. Skills support better 2026."},
+  ],
+  sean_regress:[
+    {n:"Cal Raleigh",tm:"SEA",x:.371,lk:+.021,era:null,gap:null,note:"60 HR had luck component (+.021 xwOBA gap, +.042 SLG). Still elite — expect 45 HR, not 60."},
+    {n:"Max Fried",tm:"NYY",x:null,lk:null,era:2.86,xera:3.38,gap:-.52,note:"ERA 2.86 was 0.52 luckier than xERA 3.38. True talent is mid-3.00s ERA. Still worth $26."},
+  ],
+  sean_neutral:[
+    {n:"Kevin Gausman",tm:"TOR",x:null,era:3.59,xera:3.74,gap:-.15,note:"Skills match results. xERA 3.74 — reliable mid-rotation. $12 below auction value."},
+    {n:"Parker Messick",tm:"CLE",x:null,era:2.72,xera:3.07,gap:-.35,note:"xERA 3.07 confirms elite command. BB% 3.6% historically rare. $3 is a steal."},
+    {n:"James Wood",tm:"WAS",x:.361,lk:-.008,note:"Slightly underperformed xwOBA. Skills support continued elite production. $5 elite value."},
+    {n:"Emmet Sheehan",tm:"LAD",x:null,era:2.82,xera:3.00,gap:-.18,note:"16.2% SwStr — only Skubal was higher. Breakout upside still in front of him."},
+    {n:"Eury Pérez",tm:"MIA",x:null,era:4.25,xera:3.23,gap:+1.02,note:"BUY SIGNAL on your own keeper. xERA 3.23, 14.8% SwStr, 98mph. Post-TJ breakout season."},
+  ],
+  league_rebound:[
+    {o:"jonnyj",p:"Cole Ragans",tm:"KC",era:4.67,xera:2.67,gap:+2.00,note:"Biggest rebound in dataset. K% 38.1%, xERA 2.67. Rotator cuff explained ERA."},
+    {o:"sherk",p:"Salvador Perez",tm:"KC",xwoba:.357,luck:-.046,note:"Biggest batter underperformer. xwOBA .357 but wOBA .311. Power luck -.088 — major rebound."},
+    {o:"evan",p:"Brandon Woodruff",tm:"MIL",era:3.20,xera:2.22,gap:+.98,note:"xERA 2.22, K% 30.8%. Limited to 64 IP. Full health 2026 = top-3 SP upside."},
+    {o:"cary",p:"Ben Rice",tm:"NYY",xwoba:.394,luck:-.036,note:"xwOBA .394 vs wOBA .358. Strong rebound candidate."},
+    {o:"slavens",p:"Yainer Diaz",tm:"HOU",xwoba:.326,luck:-.026,note:"xwOBA .326 vs wOBA .300. Significant power underperformance (-.048 SLG)."},
+  ],
+  league_regress:[
+    {o:"jonnyj",p:"Nick Kurtz",tm:"ATH",xwoba:.372,luck:+.047,note:"Biggest batter overperformer. Results .419 vs skills .372. Power luck +.082. Expect regression."},
+    {o:"foster",p:"AJ Smith-Shawver",tm:"ATL",era:3.86,xera:6.31,gap:-2.45,note:"WARNING — largest ERA/xERA gap among all 12 teams. ERA 3.86 is a mirage."},
+    {o:"foster",p:"Trevor Rogers",tm:"BAL",era:1.80,xera:3.41,gap:-1.60,note:"ERA 1.80 is a mirage. xERA 3.41, FIP 3.84. Sell high if opportunity arises."},
+    {o:"cary",p:"Nathan Eovaldi",tm:"TEX",era:1.73,xera:3.02,gap:-1.29,note:"ERA 1.73 vs xERA 3.02. Expect 3.20-3.60 in 2026."},
+    {o:"evan",p:"Hunter Brown",tm:"HOU",era:2.43,xera:3.14,gap:-.71,note:"ERA 2.43 overperformed skills (xERA 3.14). Expect 3.20-3.50 in 2026."},
+    {o:"slavens",p:"Nico Hoerner",tm:"CHC",xwoba:.322,luck:+.002,note:"Skill-accurate but mediocre skills (.322 xwOBA). Don't overpay for the 2025 BA."},
+  ]
+};
+
+// BREAKOUTS
+const BREAKOUT_DATA = [
+  {n:"MacKenzie Gore",tm:"TEX",kept:false,
+   stats:[["SwStr%","3 pitches ≥18% — only SP in baseball"],["Defense","TEX ranked #1 DRS in 2025"],["Control","37% ball rate — the risk"],["Role","Confirmed rotation starter"]],
+   signals:[1,1,1],
+   note:"The Crochet comp for 2026. Stuff is legitimately elite — unprecedented multi-pitch swing-and-miss profile. Rangers traded 5 prospects for him. Control is the gamble. Available at auction."},
+  {n:"Emmet Sheehan",tm:"LAD",kept:true,keeper:"sean",
+   stats:[["SwStr%","16.2% — only Skubal was higher (min 50 IP)"],["2025","2.82 ERA, 0.97 WHIP, 23% K-BB%"],["Role","LAD rotation — 6-man depth"],["Ceiling","Volume is the only constraint"]],
+   signals:[1,1,1],
+   note:"YOUR keeper at $7. Already breaking out. Only two starters in 2025 had a 16%+ SwStr% — Skubal and Sheehan. The stuff is elite; innings volume is the only question."},
+  {n:"Eury Pérez",tm:"MIA",kept:true,keeper:"sean",
+   stats:[["SwStr%","14.8% — sweeper 22% vs RHB"],["Fastball","98 mph, elite zone rate"],["2025 xERA","3.23 (ERA was 4.25 — unlucky)"],["Post-TJ","Now 2 years removed"]],
+   signals:[1,1,1],
+   note:"YOUR keeper at $5. The clearest breakout bet on your roster. 14.8% SwStr with 98mph + 5-pitch mix post-TJ. ERA 4.25 was 1.02 runs unlucky. This is his breakout year."},
+  {n:"Kyle Bradish",tm:"BAL",kept:true,keeper:"jonnyj",
+   stats:[["2025 return","2.89 xERA in 6 starts"],["Slider SwStr%","21.7%"],["Curve SwStr%","23.4%"],["Status","Post-TJ, healthy 2026"]],
+   signals:[1,1,1],
+   note:"Kept by JonnyJ. Post-TJ return showed elite slider/curve combo. 2 of his pitches had 20%+ SwStr%. Full health in 2026 = top-12 SP talent. JonnyJ has a gem."},
+  {n:"Chase Burns",tm:"CIN",kept:true,keeper:"jonnyj",
+   stats:[["K rate","10+ Ks in 4 of 8 starts"],["Slider","Wipeout offering"],["Concern","Forearm strain + limited IP ramp"],["Risk","CIN using 6-man rotation to open"]],
+   signals:[1,1,0],
+   note:"Kept by JonnyJ. Strikeout upside nearly unmatched — struck out 10 in 4 of 8 starts (Paul Skenes did it once in 32). Forearm concern is real. Risk/reward tilts to reward for a full season."},
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RENDER HELPERS
+// ─────────────────────────────────────────────────────────────────────────────
+function ls(v){
+  if(v==null)return'<span class="lu">—</span>';
+  const s=v>=0?`+${v.toFixed(3)}`:v.toFixed(3);
+  return`<span class="${v>=0.015?'lp':v<=-0.015?'ln':'lu'}">${s}</span>`;
+}
+function pill(p){
+  const m={buy:'buy',tgt:'tgt',sol:'sol',dep:'dep',cau:'cau',hot:'hot',watch:'watch'};
+  const l={buy:'BUY',tgt:'TARGET',sol:'SOLID',dep:'DEPTH',cau:'CAUTION',hot:'HOT',watch:'WATCH'};
+  return`<span class="pill ${m[p]}">${l[p]}</span>`;
+}
+function tc(t){return t===1?'t1':t===2?'t2':'t3';}
+
+function keptBar(kept){
+  const names=kept.map(k=>`<span class="kn">${k.n}</span><span class="ko">(${k.o}·${k.tm})</span>`).join(' · ');
+  return`<div class="kept-bar"><strong>⛔ Kept</strong>${names}</div>`;
+}
+
+function renderBat(pos){
+  const d=POS_DATA[pos];
+  let h=keptBar(d.kept)+`<div class="mkt">${d.note}</div><div class="tw"><table>
+  <thead><tr><th style="width:16%">Player</th><th style="width:5%">Tm</th><th style="width:8%">Tier</th>
+  <th style="width:7%">wOBA</th><th style="width:7%">xwOBA</th><th style="width:8%">Luck</th>
+  <th style="width:8%">PwrLck</th><th style="width:4%">PA</th><th style="width:18%">Scouting note</th><th>Your notes</th>
+  </tr></thead><tbody>`;
+  d.players.forEach((r,i)=>{
+    const nid=`bat_${pos}_${i}`;
+    const pw=r.pw!=null?ls(r.pw):'<span class="lu">—</span>';
+    h+=`<tr class="${tc(r.t)}">
+      <td class="pn">${r.n}</td><td class="tm">${r.tm}</td><td>${pill(r.pl)}</td>
+      <td class="mono">${r.w.toFixed(3)}</td><td class="xv">${r.x.toFixed(3)}</td>
+      <td>${ls(r.lk)}</td><td>${pw}</td>
+      <td class="mono" style="color:var(--text3)">${r.pa}</td>
+      <td class="note-cell">${r.nt}</td>
+      <td>${noteHTML(nid,'')}</td>
+    </tr>`;
+  });
+  return h+'</tbody></table></div>';
+}
+
+function renderPitch(pos){
+  const d=POS_DATA[pos];
+  let h=keptBar(d.kept)+`<div class="mkt">${d.note}</div><div class="tw"><table>
+  <thead><tr><th style="width:14%">Player</th><th style="width:5%">Tm</th><th style="width:8%">Tier</th>
+  <th style="width:6%">ERA</th><th style="width:6%">xERA</th><th style="width:7%">Gap</th>
+  <th style="width:6%">K%</th><th style="width:6%">BB%</th><th style="width:6%">FIP</th>
+  <th style="width:18%">Scouting note</th><th>Your notes</th>
+  </tr></thead><tbody>`;
+  d.players.forEach((r,i)=>{
+    const nid=`pit_${pos}_${i}`;
+    const gc=r.gap!=null?(r.gap>=.30?'lp':r.gap<=-.30?'ln':'lu'):'lu';
+    const gs=r.gap!=null?(r.gap>=0?`+${r.gap.toFixed(2)}`:r.gap.toFixed(2)):'—';
+    h+=`<tr class="${tc(r.t)}">
+      <td class="pn">${r.n}</td><td class="tm">${r.tm}</td><td>${pill(r.pl)}</td>
+      <td class="mono">${r.era!=null?r.era.toFixed(2):'—'}</td>
+      <td class="xv">${r.xera!=null?r.xera.toFixed(2):'—'}</td>
+      <td class="mono"><span class="${gc}">${gs}</span></td>
+      <td class="mono" style="color:var(--text2)">${r.k?r.k.toFixed(1)+'%':'—'}</td>
+      <td class="mono" style="color:var(--text2)">${r.bb?r.bb.toFixed(1)+'%':'—'}</td>
+      <td class="mono" style="color:var(--text2)">${r.fip?r.fip.toFixed(2):'—'}</td>
+      <td class="note-cell">${r.nt}</td>
+      <td>${noteHTML(nid,'')}</td>
+    </tr>`;
+  });
+  return h+'</tbody></table></div>';
+}
+
+function renderWaiver(){
+  let h=`<div class="mkt">The Statcast model only covers players with 300+ PA or 100+ BIP at the MLB level. These are prospects approaching MLB ETA or MLB players showing hot-streak signals not captured in the 2025 model. <strong style="color:var(--amber)">All ETAs sourced from MLB Pipeline / CBS Sports March 25 2026.</strong> Notes are editable and saved to your browser.</div>`;
+
+  // Hitters
+  h+=`<div class="sec-hdr"><span class="sec-dot" style="background:var(--cyan)"></span>PROSPECTS & CALL-UP WATCH — HITTERS</div>`;
+  h+=`<div class="wgrid">`;
+  WAIVER_DATA.hitters.forEach((p,i)=>{
+    const nid=`w_hit_${i}`;
+    h+=`<div class="wcard">
+      <div class="wc-hdr">
+        <div><div class="wc-name">${p.n}</div><div class="wc-tm">${p.tm} · ${p.pos}</div></div>
+        <span class="wc-eta ${p.eta_cls}">${p.eta==='now'?'NOW':'ETA '+p.eta.toUpperCase()}</span>
+      </div>
+      <div class="wc-signal">${p.sigs.map(s=>pill(s)).join(' ')}</div>
+      <div class="wc-stats">${p.stats.map(s=>`<div class="wc-s"><span class="wsl">${s[0]}</span><span class="wsv">${s[1]}</span></div>`).join('')}</div>
+      <div class="wc-note">${p.note}</div>
+      <div style="margin-top:.6rem">${noteHTML(nid,'')}</div>
+    </div>`;
+  });
+  h+=`</div>`;
+
+  // Pitchers
+  h+=`<div class="sec-hdr"><span class="sec-dot" style="background:var(--purple)"></span>PROSPECTS & CALL-UP WATCH — PITCHERS</div>`;
+  h+=`<div class="wgrid">`;
+  WAIVER_DATA.pitchers.forEach((p,i)=>{
+    const nid=`w_pit_${i}`;
+    h+=`<div class="wcard">
+      <div class="wc-hdr">
+        <div><div class="wc-name">${p.n}</div><div class="wc-tm">${p.tm} · ${p.pos}</div></div>
+        <span class="wc-eta ${p.eta_cls}">${p.eta==='now'?'NOW':'ETA '+p.eta.toUpperCase()}</span>
+      </div>
+      <div class="wc-signal">${p.sigs.map(s=>pill(s)).join(' ')}</div>
+      <div class="wc-stats">${p.stats.map(s=>`<div class="wc-s"><span class="wsl">${s[0]}</span><span class="wsv">${s[1]}</span></div>`).join('')}</div>
+      <div class="wc-note">${p.note}</div>
+      <div style="margin-top:.6rem">${noteHTML(nid,'')}</div>
+    </div>`;
+  });
+  h+=`</div>`;
+
+  // Breakout framework
+  h+=`<div class="sec-hdr" style="margin-top:.5rem"><span class="sec-dot" style="background:var(--amber)"></span>BREAKOUT FRAMEWORK — THE CROCHET SIGNALS</div>`;
+  h+=`<div class="mkt">The Statcast model can't catch first-year breakouts with small samples. These three signals are what caught Crochet before 2025: <strong style="color:var(--text)">SwStr% ≥13%</strong> (stuff is real in any sample), <strong style="color:var(--text)">K% ≥27%</strong> (most stable pitching skill), <strong style="color:var(--text)">confirmed rotation role</strong>. All three = act. Two = watch.</div>`;
+  h+=`<div class="bflex">`;
+  BREAKOUT_DATA.forEach((p,i)=>{
+    const nid=`brk_${i}`;
+    const dot = p.kept?`<span class="pill ${p.keeper==='sean'?'tgt':'dep'}">${p.keeper==='sean'?'YOUR KEEPER':'OPPONENT KEPT'}</span>`:'<span class="pill buy">AVAILABLE</span>';
+    h+=`<div class="bcard">
+      <div class="bc-name">${p.n} ${dot}</div>
+      <div class="bc-sub">${p.tm} · ${p.kept?(p.keeper+' keeper'):'auction target'}</div>
+      <div style="display:flex;gap:4px;margin-bottom:3px">${p.signals.map(v=>`<span class="sd${v?' on':''}" title="Signal"></span>`).join('')}</div>
+      <div class="slab" style="margin-bottom:.5rem">${p.signals.filter(Boolean).length}/3 signals confirmed</div>
+      <div class="bc-stats2">${p.stats.map(s=>`<div class="bcs"><span class="bl">${s[0]}</span><span class="bv">${s[1]}</span></div>`).join('')}</div>
+      <div class="bc-note2">${p.note}</div>
+      <div style="margin-top:.6rem">${noteHTML(nid,'')}</div>
+    </div>`;
+  });
+  h+=`</div>`;
+  return h;
+}
+
+function renderProspects(){
+  let h=`<div class="mkt">These three players are on your Minors list and are <strong style="color:var(--green)">MLB-ready right now</strong>. All three are making Opening Day rosters today. Promote them before the auction — they do not belong on your Minors list.</div>`;
+  h+=`<div class="pgrid">`;
+  PROSPECT_DATA.forEach((p,i)=>{
+    const nid=`pro_${i}`;
+    h+=`<div class="pcard">
+      <div class="pc-name">${p.n}</div>
+      <div class="pc-meta"><span>${p.tm}</span> · ${p.pos} · ${p.sal} · ${p.contract}</div>
+      <div style="margin-bottom:.7rem"><span class="pill buy" style="font-size:9px">${p.status}</span></div>
+      ${p.stats.map(s=>`<div class="pc-stat"><span class="sl">${s[0]}</span><span class="sv">${s[1]}</span></div>`).join('')}
+      <div class="pc-action">${p.action}</div>
+      <div style="margin-top:.65rem;font-size:11px;color:var(--text2);line-height:1.4">${p.note}</div>
+      <div style="margin-top:.5rem">${noteHTML(nid,'')}</div>
+    </div>`;
+  });
+  h+=`</div>`;
+  return h;
+}
+
+function renderKeepers(){
+  const K=KEEPER_DATA;
+  let h=`<div class="mkt">Statcast signals on your roster and every opponent. <strong style="color:var(--green)">Rebound</strong> = results underperformed skills (expect improvement). <strong style="color:var(--red)">Regression</strong> = results overperformed skills (expect worse). All notes are editable.</div>`;
+
+  // Your roster
+  h+=`<div class="sec-hdr"><span class="sec-dot" style="background:var(--accent)"></span>YOUR ROSTER — SEAN</div>`;
+  h+=`<div class="krow">`;
+
+  h+=`<div class="kcol"><div class="kcol-hdr" style="color:var(--amber)">⚠ Regression Risk</div>`;
+  K.sean_regress.forEach((r,i)=>{
+    const nid=`kr_sr_${i}`;
+    h+=`<div class="kr">
+      <span class="kr-name">${r.n} <span class="tm">${r.tm}</span></span>
+      <span class="kr-meta">${r.era?`ERA ${r.era.toFixed(2)} → xERA ${r.xera.toFixed(2)} (gap ${r.gap>=0?'+':''}${r.gap.toFixed(2)})`:`xwOBA ${r.x.toFixed(3)} (luck ${r.lk>=0?'+':''}${r.lk.toFixed(3)})`}</span>
+      <span class="kr-note">${r.note}</span>
+      ${noteHTML(nid,'')}
+    </div>`;
+  });
+  h+=`</div>`;
+
+  h+=`<div class="kcol"><div class="kcol-hdr" style="color:var(--green)">↑ Rebound / Upside</div>`;
+  K.sean_rebound.forEach((r,i)=>{
+    const nid=`kr_sreb_${i}`;
+    h+=`<div class="kr">
+      <span class="kr-name">${r.n} <span class="tm">${r.tm}</span></span>
+      <span class="kr-meta">xwOBA ${r.x.toFixed(3)} (luck ${r.lk.toFixed(3)})</span>
+      <span class="kr-note">${r.note}</span>
+      ${noteHTML(nid,'')}
+    </div>`;
+  });
+  h+=`</div>`;
+
+  h+=`<div class="kcol"><div class="kcol-hdr" style="color:var(--text3)">● Neutral / Accurate</div>`;
+  K.sean_neutral.forEach((r,i)=>{
+    const nid=`kr_sn_${i}`;
+    h+=`<div class="kr">
+      <span class="kr-name">${r.n} <span class="tm">${r.tm}</span></span>
+      <span class="kr-note">${r.note}</span>
+      ${noteHTML(nid,'')}
+    </div>`;
+  });
+  h+=`</div></div>`;
+
+  // League rebound
+  h+=`<div class="sec-hdr" style="margin-top:1rem"><span class="sec-dot" style="background:var(--green)"></span>LEAGUE-WIDE REBOUND CANDIDATES (opponents whose players should improve)</div>`;
+  h+=`<div class="krow">`;
+  K.league_rebound.forEach((r,i)=>{
+    const nid=`kr_lr_${i}`;
+    h+=`<div class="kcol"><div class="kr">
+      <span class="kr-name" style="color:var(--accent)">${r.o}</span> — <span class="kr-name">${r.p} <span class="tm">${r.tm}</span></span>
+      <span class="kr-meta">${r.era?`ERA ${r.era.toFixed(2)} → xERA ${r.xera.toFixed(2)} (gap +${r.gap.toFixed(2)})`:`xwOBA ${r.xwoba.toFixed(3)} (luck ${r.luck.toFixed(3)})`}</span>
+      <span class="kr-note">${r.note}</span>
+      ${noteHTML(nid,'')}
+    </div></div>`;
+  });
+  h+=`</div>`;
+
+  // League regression
+  h+=`<div class="sec-hdr" style="margin-top:1rem"><span class="sec-dot" style="background:var(--red)"></span>LEAGUE-WIDE REGRESSION RISKS (opponents who got lucky)</div>`;
+  h+=`<div class="krow">`;
+  K.league_regress.forEach((r,i)=>{
+    const nid=`kr_lreg_${i}`;
+    h+=`<div class="kcol"><div class="kr">
+      <span class="kr-name" style="color:var(--red)">${r.o}</span> — <span class="kr-name">${r.p} <span class="tm">${r.tm}</span></span>
+      <span class="kr-meta">${r.era?`ERA ${r.era.toFixed(2)} → xERA ${r.xera.toFixed(2)} (gap ${r.gap.toFixed(2)})`:`xwOBA ${r.xwoba.toFixed(3)} (luck +${r.luck.toFixed(3)})`}</span>
+      <span class="kr-note">${r.note}</span>
+      ${noteHTML(nid,'')}
+    </div></div>`;
+  });
+  h+=`</div>`;
+  return h;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// NAVIGATION
+// ─────────────────────────────────────────────────────────────────────────────
+const isPitch={SP:1,RP:1};
+const isBat={C:1,'1B':1,'2B':1,'3B':1,SS:1,OF:1};
+const tabLabels={C:'C','1B':'1B','2B':'2B','3B':'3B',SS:'SS',OF:'OF',SP:'SP',RP:'RP/CL',Waiver:'Waiver Wire',Prospects:'Prospects',Keepers:'Keeper Intel'};
+
+let cur='C';
+function render(pos){
+  cur=pos;
+  document.querySelectorAll('.ntab').forEach(t=>t.classList.toggle('active',t.dataset.pos===pos));
+  const m=document.getElementById('main');
+  if(isPitch[pos])      m.innerHTML=renderPitch(pos);
+  else if(isBat[pos])   m.innerHTML=renderBat(pos);
+  else if(pos==='Waiver')    m.innerHTML=renderWaiver();
+  else if(pos==='Prospects') m.innerHTML=renderProspects();
+  else if(pos==='Keepers')   m.innerHTML=renderKeepers();
+  // Re-attach note values from storage
+  document.querySelectorAll('[data-id]').forEach(el=>{
+    const id=el.dataset.id;
+    if(notes[id]!==undefined && el.innerText!==notes[id]) el.innerText=notes[id];
+  });
+}
+
+const nav=document.getElementById('nav');
+TABS.forEach((pos,i)=>{
+  const b=document.createElement('button');
+  b.className='ntab'+(i===0?' active':'');
+  b.dataset.pos=pos;
+  b.innerHTML=`<span class="nb">${tabLabels[pos]}</span>`;
+  b.onclick=()=>render(pos);
+  nav.appendChild(b);
+});
+
+render('C');
+</script>
+</body>
+</html>
