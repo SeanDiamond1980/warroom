@@ -392,6 +392,7 @@ select{flex:1;cursor:pointer;}
       <button class="rtab active" onclick="switchTab('recs',this)">Recommendations</button>
       <button class="rtab" onclick="switchTab('log',this)">Auction Log</button>
       <button class="rtab" onclick="switchTab('targets',this)">My Targets</button>
+      <button class="rtab" onclick="switchTab('guide',this)">📖 Guide</button>
     </div>
     <div id="right-content" class="rec-panel"></div>
   </div>
@@ -423,7 +424,7 @@ const MY_SLOTS = [
   {id:'OF3',  label:'OF',   filled:false, keeper:null,              pos:['OF']},
   {id:'OF4',  label:'OF',   filled:false, keeper:null,              pos:['OF']},
   {id:'OF5',  label:'OF',   filled:false, keeper:null,              pos:['OF']},
-  {id:'UTIL', label:'UTIL', filled:false, keeper:null,              pos:['C','1B','2B','3B','SS','OF']},
+  {id:'UTIL', label:'UTIL', filled:false, keeper:null,              pos:['1B','2B','3B','SS','OF']},
   {id:'P1',   label:'P',    filled:true,  keeper:'K. Gausman',      pos:['SP','RP']},
   {id:'P2',   label:'P',    filled:true,  keeper:'Eury Pérez',      pos:['SP','RP']},
   {id:'P3',   label:'P',    filled:true,  keeper:'E. Sheehan',      pos:['SP','RP']},
@@ -2026,7 +2027,8 @@ const PLAYERS = [
     "tier": 1,
     "tag": "tgt",
     "projVal": 42,
-    "mlb": true
+    "mlb": true,
+    "kept_by": "foster"
   },
   {
     "id": "riley",
@@ -2335,9 +2337,10 @@ const PLAYERS = [
     "xstat": 0.305,
     "era_gap": null,
     "tier": 3,
-    "tag": "dep",
+    "tag": "break",
     "projVal": 5,
-    "mlb": true
+    "mlb": true,
+    "sleep": true
   },
   {
     "id": "tatis",
@@ -2542,7 +2545,8 @@ const PLAYERS = [
     "tier": 2,
     "tag": "cau",
     "projVal": 16,
-    "mlb": true
+    "mlb": true,
+    "kept_by": "evan"
   },
   {
     "id": "neto",
@@ -2744,9 +2748,10 @@ const PLAYERS = [
     "xstat": 0.312,
     "era_gap": null,
     "tier": 3,
-    "tag": "dep",
+    "tag": "break",
     "projVal": 8,
-    "mlb": true
+    "mlb": true,
+    "sleep": true
   },
   {
     "id": "caballero",
@@ -2955,7 +2960,8 @@ const PLAYERS = [
     "tier": 1,
     "tag": "tgt",
     "projVal": 45,
-    "mlb": true
+    "mlb": true,
+    "kept_by": "evan"
   },
   {
     "id": "tucker",
@@ -3310,7 +3316,8 @@ const PLAYERS = [
     "tier": 1,
     "tag": "tgt",
     "projVal": 38,
-    "mlb": true
+    "mlb": true,
+    "kept_by": "slavens"
   },
   {
     "id": "adell",
@@ -3698,9 +3705,10 @@ const PLAYERS = [
     "xstat": 0.348,
     "era_gap": null,
     "tier": 2,
-    "tag": "sol",
+    "tag": "break",
     "projVal": 10,
-    "mlb": true
+    "mlb": true,
+    "sleep": true
   },
   {
     "id": "friedl",
@@ -4357,7 +4365,8 @@ const PLAYERS = [
     "tier": 2,
     "tag": "sol",
     "projVal": 8,
-    "mlb": true
+    "mlb": true,
+    "kept_by": "foster"
   },
   {
     "id": "isbel",
@@ -4894,7 +4903,8 @@ const PLAYERS = [
     "tier": 2,
     "tag": "buy",
     "projVal": 16,
-    "mlb": true
+    "mlb": true,
+    "kept_by": "sean"
   },
   {
     "id": "sheehan",
@@ -5256,7 +5266,8 @@ const PLAYERS = [
     "tier": 2,
     "tag": "sol",
     "projVal": 18,
-    "mlb": true
+    "mlb": true,
+    "kept_by": "slavens"
   },
   {
     "id": "woodruff",
@@ -5948,9 +5959,10 @@ const PLAYERS = [
     "xstat": null,
     "era_gap": null,
     "tier": 3,
-    "tag": "dep",
+    "tag": "break",
     "projVal": 6,
-    "mlb": true
+    "mlb": true,
+    "sleep": true
   },
   {
     "id": "keller_m",
@@ -6817,7 +6829,7 @@ const PLAYERS = [
   {
     "id": "jax",
     "name": "Griffin Jax",
-    "tm": "MIN",
+    "tm": "TB",
     "pos": [
       "RP"
     ],
@@ -6835,9 +6847,10 @@ const PLAYERS = [
     "xstat": 3.26,
     "era_gap": 0.97,
     "tier": 3,
-    "tag": "dep",
+    "tag": "break",
     "projVal": 5,
-    "mlb": true
+    "mlb": true,
+    "sleep": true
   },
   {
     "id": "strahm",
@@ -7478,31 +7491,6 @@ const PLAYERS = [
     "tier": 3,
     "tag": "dep",
     "projVal": 2,
-    "mlb": true
-  },
-  {
-    "id": "tovar2",
-    "name": "Ezequiel Tovar",
-    "tm": "COL",
-    "pos": [
-      "SS"
-    ],
-    "type": "bat",
-    "ba": 0.268,
-    "r": 65,
-    "hr": 14,
-    "rbi": 58,
-    "sb": 8,
-    "era": null,
-    "whip": null,
-    "w": null,
-    "k": null,
-    "sv": null,
-    "xstat": 0.312,
-    "era_gap": null,
-    "tier": 3,
-    "tag": "dep",
-    "projVal": 5,
     "mlb": true
   },
   {
@@ -8172,9 +8160,8 @@ const PLAYERS = [
   {
     "id": "sosa",
     "name": "Lenyn Sosa",
-    "tm": "CHW",
+    "tm": "CWS",
     "pos": [
-      "SS",
       "2B"
     ],
     "type": "bat",
@@ -8191,9 +8178,10 @@ const PLAYERS = [
     "xstat": 0.326,
     "era_gap": null,
     "tier": 3,
-    "tag": "dep",
+    "tag": "break",
     "projVal": 3,
-    "mlb": true
+    "mlb": true,
+    "sleep": true
   },
   {
     "id": "montgomery",
@@ -8850,9 +8838,10 @@ const PLAYERS = [
     "xstat": null,
     "era_gap": null,
     "tier": 3,
-    "tag": "dep",
+    "tag": "break",
     "projVal": 4,
-    "mlb": true
+    "mlb": true,
+    "sleep": true
   },
   {
     "id": "mikolas2",
@@ -9738,10 +9727,11 @@ const PLAYERS = [
     "xstat": null,
     "era_gap": null,
     "tier": 3,
-    "tag": "dep",
+    "tag": "break",
     "projVal": 6,
     "mlb": true,
-    "mlb_note": ""
+    "mlb_note": "",
+    "sleep": true
   },
   {
     "id": "eflin",
@@ -10548,10 +10538,11 @@ const PLAYERS = [
     "xstat": 0.302,
     "era_gap": null,
     "tier": 3,
-    "tag": "dep",
+    "tag": "break",
     "projVal": 5,
     "mlb": true,
-    "mlb_note": ""
+    "mlb_note": "",
+    "sleep": true
   },
   {
     "id": "meadows_p",
@@ -11595,10 +11586,11 @@ const PLAYERS = [
     "xstat": 0.285,
     "era_gap": null,
     "tier": 3,
-    "tag": "dep",
+    "tag": "break",
     "projVal": 4,
     "mlb": true,
-    "mlb_note": ""
+    "mlb_note": "",
+    "sleep": true
   },
   {
     "id": "clarke_d",
@@ -11647,10 +11639,11 @@ const PLAYERS = [
     "xstat": null,
     "era_gap": null,
     "tier": 3,
-    "tag": "dep",
+    "tag": "break",
     "projVal": 5,
     "mlb": true,
-    "mlb_note": ""
+    "mlb_note": "",
+    "sleep": true
   },
   {
     "id": "morales_l",
@@ -12303,10 +12296,11 @@ const PLAYERS = [
     "xstat": 0.285,
     "era_gap": null,
     "tier": 3,
-    "tag": "dep",
+    "tag": "break",
     "projVal": 3,
     "mlb": true,
-    "mlb_note": ""
+    "mlb_note": "",
+    "sleep": true
   },
   {
     "id": "lopez_o",
@@ -12386,7 +12380,8 @@ const PLAYERS = [
     "tag": "sol",
     "projVal": 8,
     "mlb": true,
-    "mlb_note": ""
+    "mlb_note": "",
+    "kept_by": "steve"
   },
   {
     "id": "caissie",
@@ -12782,7 +12777,8 @@ const PLAYERS = [
     "tag": "sol",
     "projVal": 12,
     "mlb": true,
-    "mlb_note": ""
+    "mlb_note": "",
+    "kept_by": "eli"
   },
   {
     "id": "williamson_bw",
@@ -13100,6 +13096,214 @@ const PLAYERS = [
     "projVal": 5,
     "mlb": true,
     "mlb_note": ""
+  },
+  {
+    "id": "rumfield",
+    "name": "TJ Rumfield",
+    "tm": "COL",
+    "pos": [
+      "1B"
+    ],
+    "type": "bat",
+    "ba": 0.265,
+    "r": 55,
+    "hr": 14,
+    "rbi": 60,
+    "sb": 4,
+    "era": null,
+    "whip": null,
+    "w": null,
+    "k": null,
+    "sv": null,
+    "xstat": 0.31,
+    "era_gap": null,
+    "tier": 3,
+    "tag": "break",
+    "projVal": 2,
+    "mlb": true,
+    "sleep": true
+  },
+  {
+    "id": "vaughn",
+    "name": "Andrew Vaughn",
+    "tm": "MIL",
+    "pos": [
+      "1B"
+    ],
+    "type": "bat",
+    "ba": 0.27,
+    "r": 68,
+    "hr": 20,
+    "rbi": 75,
+    "sb": 4,
+    "era": null,
+    "whip": null,
+    "w": null,
+    "k": null,
+    "sv": null,
+    "xstat": 0.33,
+    "era_gap": null,
+    "tier": 3,
+    "tag": "break",
+    "projVal": 3,
+    "mlb": true,
+    "sleep": true
+  },
+  {
+    "id": "crawford_j",
+    "name": "Justin Crawford",
+    "tm": "PHI",
+    "pos": [
+      "OF"
+    ],
+    "type": "bat",
+    "ba": 0.26,
+    "r": 52,
+    "hr": 8,
+    "rbi": 42,
+    "sb": 14,
+    "era": null,
+    "whip": null,
+    "w": null,
+    "k": null,
+    "sv": null,
+    "xstat": 0.305,
+    "era_gap": null,
+    "tier": 3,
+    "tag": "break",
+    "projVal": 2,
+    "mlb": true,
+    "sleep": true
+  },
+  {
+    "id": "reynolds",
+    "name": "Bryan Reynolds",
+    "tm": "PIT",
+    "pos": [
+      "OF"
+    ],
+    "type": "bat",
+    "ba": 0.278,
+    "r": 72,
+    "hr": 18,
+    "rbi": 70,
+    "sb": 8,
+    "era": null,
+    "whip": null,
+    "w": null,
+    "k": null,
+    "sv": null,
+    "xstat": 0.335,
+    "era_gap": null,
+    "tier": 3,
+    "tag": "buy",
+    "projVal": 4,
+    "mlb": true,
+    "sleep": true
+  },
+  {
+    "id": "scottii",
+    "name": "Victor Scott II",
+    "tm": "STL",
+    "pos": [
+      "OF"
+    ],
+    "type": "bat",
+    "ba": 0.248,
+    "r": 58,
+    "hr": 8,
+    "rbi": 40,
+    "sb": 30,
+    "era": null,
+    "whip": null,
+    "w": null,
+    "k": null,
+    "sv": null,
+    "xstat": 0.298,
+    "era_gap": null,
+    "tier": 3,
+    "tag": "break",
+    "projVal": 3,
+    "mlb": true,
+    "sleep": true
+  },
+  {
+    "id": "alderman",
+    "name": "Kemp Alderman",
+    "tm": "MIA",
+    "pos": [
+      "OF"
+    ],
+    "type": "bat",
+    "ba": 0.24,
+    "r": 48,
+    "hr": 18,
+    "rbi": 55,
+    "sb": 4,
+    "era": null,
+    "whip": null,
+    "w": null,
+    "k": null,
+    "sv": null,
+    "xstat": 0.295,
+    "era_gap": null,
+    "tier": 3,
+    "tag": "break",
+    "projVal": 1,
+    "mlb": true,
+    "sleep": true
+  },
+  {
+    "id": "yorke",
+    "name": "Nick Yorke",
+    "tm": "PIT",
+    "pos": [
+      "2B"
+    ],
+    "type": "bat",
+    "ba": 0.27,
+    "r": 52,
+    "hr": 10,
+    "rbi": 48,
+    "sb": 6,
+    "era": null,
+    "whip": null,
+    "w": null,
+    "k": null,
+    "sv": null,
+    "xstat": 0.312,
+    "era_gap": null,
+    "tier": 3,
+    "tag": "break",
+    "projVal": 2,
+    "mlb": true,
+    "sleep": true
+  },
+  {
+    "id": "cano_y",
+    "name": "Yennier Cano",
+    "tm": "BAL",
+    "pos": [
+      "RP"
+    ],
+    "type": "pit",
+    "ba": null,
+    "r": null,
+    "hr": null,
+    "rbi": null,
+    "sb": null,
+    "era": 3.1,
+    "whip": 1.08,
+    "w": 3,
+    "k": 62,
+    "sv": 10,
+    "xstat": null,
+    "era_gap": 0.05,
+    "tier": 3,
+    "tag": "dep",
+    "projVal": 2,
+    "mlb": true,
+    "sleep": true
   }
 ];
 
@@ -13545,6 +13749,7 @@ function renderRecs() {
   const filtered = filter === 'ALL' ? avail :
     filter === 'BAT' ? avail.filter(p => p.ba !== null) :
     filter === 'PIT' ? avail.filter(p => p.ba === null) :
+    filter === 'SLEEP' ? avail.filter(p => p.sleep) :
     avail.filter(p => p.pos.includes(filter));
 
   const scored = filtered.map(p => ({...p, score: scorePlayer(p)}))
@@ -13557,7 +13762,9 @@ function renderRecs() {
   let html = `<div class="rec-controls">
     ${['ALL','BAT','PIT','C','1B','2B','3B','SS','OF','SP','RP'].map(f =>
       `<button class="filter-btn${state.posFilter===f?' active':''}" onclick="setFilter('${f}')">${f}</button>`
-    ).join('') + `<button class="filter-btn${state.posFilter==='VALUE'?' active':''}" onclick="setFilter('VALUE')" style="background:var(--bg2);border-color:#E8A838;color:#E8A838;font-weight:900;">$1-3 SLEEPERS / $5-15 ★</button>`}
+    ).join('')}
+    <button class="filter-btn${state.posFilter==='SLEEP'?' active':''}" onclick="setFilter('SLEEP')" style="background:#1a2a1a;border-color:#5BAD6F;color:#5BAD6F;font-weight:900;margin-left:8px;">💤 $1-3 SLEEPERS</button>
+    <button class="filter-btn${state.posFilter==='VALUE'?' active':''}" onclick="setFilter('VALUE')" style="background:var(--bg2);border-color:#E8A838;color:#E8A838;font-weight:900;">$5-15 ★</button>
     <span class="sort-label">Ranked by: Skill × Category Need × Value</span>
   </div>`;
 
@@ -13743,20 +13950,84 @@ function switchTab(tab, btn) {
   document.querySelectorAll('.rtab').forEach(t => t.classList.remove('active'));
   btn.classList.add('active');
   const panel = document.getElementById('right-content');
-  panel.className = tab === 'recs' ? 'rec-panel' : 'log-panel';
+  panel.className = tab === 'recs' ? 'rec-panel' : tab === 'guide' ? 'rec-panel' : 'log-panel';
   renderRightPanel();
 }
 
 function renderRightPanel() {
   const el = document.getElementById('right-content');
-  if(state.currentTab === 'recs')    el.innerHTML = renderRecs();
-  else if(state.currentTab === 'log') el.innerHTML = renderLog();
+  if(state.currentTab === 'recs')         el.innerHTML = renderRecs();
+  else if(state.currentTab === 'log')     el.innerHTML = renderLog();
   else if(state.currentTab === 'targets') el.innerHTML = renderTargets();
+  else if(state.currentTab === 'guide')   el.innerHTML = renderGuide();
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// RESET
-// ─────────────────────────────────────────────────────────────────────────────
+function renderGuide() {
+  const s = (tag, cls, title, body) =>
+    '<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:.65rem">' +
+    '<span class="pill p-' + cls + '" style="flex-shrink:0;margin-top:2px">' + tag + '</span>' +
+    '<div><div style="font-size:10.5px;font-weight:700;color:var(--text);margin-bottom:2px">' + title + '</div>' +
+    '<div style="font-size:10px;color:var(--t2);line-height:1.5">' + body + '</div></div></div>';
+
+  const row = (label, body, w) =>
+    '<div style="display:flex;gap:8px;margin-bottom:.5rem">' +
+    '<span style="font-family:var(--mono);font-size:10px;font-weight:700;color:var(--a);min-width:' + (w||52) + 'px;flex-shrink:0">' + label + '</span>' +
+    '<span style="font-size:10px;color:var(--t2);line-height:1.5">' + body + '</span></div>';
+
+  const hdr = (txt) =>
+    '<div style="font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;' +
+    'letter-spacing:.08em;margin-bottom:.5rem;border-bottom:1px solid var(--border);padding-bottom:4px">' + txt + '</div>';
+
+  let h = '<div style="font-family:var(--mono);font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem">Tag Reference &amp; Auction Strategy</div>';
+
+  // Priority hierarchy
+  h += '<div style="margin-bottom:1.25rem">';
+  h += hdr('Priority Hierarchy');
+  h += '<div style="font-family:var(--mono);font-size:11px;color:var(--a);letter-spacing:.05em;margin-bottom:.5rem">BUY &gt; TGT &gt; BREAK &gt; SOL &gt; ROLE &gt; SPECL &gt; SLEEP &gt; DEP &gt; CAU</div>';
+  h += '<div style="font-size:10.5px;color:var(--t2);line-height:1.6">A <strong>BUY</strong> outranks <strong>TGT</strong> because it means getting a top-tier player at a discount. A <strong>CAU</strong> sits below <strong>DEP</strong> because results were lucky and the room will overpay &mdash; let them.</div>';
+  h += '</div>';
+
+  // Skill level tags
+  h += '<div style="margin-bottom:1.25rem">';
+  h += hdr('Skill Level Tags');
+  h += s('TGT',  'tgt',  'Target &mdash; Best Available',        'The best player available at this position. Do not let them go cheap. Pay whatever it takes up to your max.');
+  h += s('SOL',  'sol',  'Solid &mdash; Reliable Floor',         'Skill-accurate. Results match what the metrics say. Pay fair value confidently &mdash; no luck gap to exploit or fear.');
+  h += s('DEP',  'dep',  'Depth &mdash; Late Auction Filler',    'Below-average skills or limited role. Only bid late when budget is nearly gone. Do not overpay.');
+  h += '</div>';
+
+  // Auction strategy tags
+  h += '<div style="margin-bottom:1.25rem">';
+  h += hdr('Auction Strategy Tags');
+  h += s('BUY',   'buy',  'Buy &mdash; Exploit the Gap',         'xwOBA or xERA is significantly better than actual results. The room prices the bad results, you price the real skill. This is where auctions are won.');
+  h += s('CAU',   'cau',  'Caution &mdash; Results Were Lucky',  'ERA or wOBA was better than skills support. The room will overpay based on last year. Let them &mdash; this player regresses.');
+  h += s('ROLE',  'tgt',  'Role &mdash; New Job in 2026',        'Confirmed role upgrade: new closer job, new team, or new everyday role. The price has not caught up to the new reality yet.');
+  h += s('SPECL', 'cau',  'Specialist &mdash; One Category Only','Buy specifically because you need SB, SV, or BA. Do not pay for overall fantasy value &mdash; just the category they fill.');
+  h += s('BREAK', 'buy',  'Breakout &mdash; Room Does Not Know', 'Metrics or spring training signal a step forward not priced in. Upside exceeds current auction value. Act before the room catches on.');
+  h += s('SLEEP', 'buy',  'Sleeper &mdash; $1&ndash;$3 Dart',   'Unknown player or invisible team. Confirmed starter with real track record. The room has never heard of them &mdash; that is the edge.');
+  h += '</div>';
+
+  // Statcast columns
+  h += '<div style="margin-bottom:1.25rem">';
+  h += hdr('Statcast Columns');
+  h += row('wOBA',   'Actual weighted on-base average from 2025. What the room sees and prices.');
+  h += row('xwOBA',  'Expected wOBA based on exit velocity, launch angle, barrel rate. What the skills actually are.');
+  h += row('Luck',   'xwOBA minus wOBA. Positive = underperformed (BUY signal). Negative = overperformed (CAUTION).');
+  h += row('PwrLck', 'Power luck specifically &mdash; gap between actual and expected slugging. Biggest mispricing source in auctions.', 58);
+  h += row('xERA',   'Expected ERA based on contact quality. The truth. Actual ERA is the story the room believes.');
+  h += row('Gap',    'ERA minus xERA for pitchers. Positive = ERA was worse than skills (BUY). Negative = ERA was lucky (CAU).');
+  h += '</div>';
+
+  // Budget
+  h += '<div>';
+  h += hdr('Budget &amp; Slots');
+  h += row('Max Bid',    'Your remaining budget minus $1 per remaining open slot. The most you can spend on one player without going broke.', 65);
+  h += row('Slots Left', 'Your 9 open auction slots counting down as you win players. Keepers are pre-filled and do not count.', 65);
+  h += '</div>';
+
+  return h;
+}
+
+
 function resetAuction() {
   if(!confirm('Reset all auction data? Keeper data will be preserved.')) return;
   state.spent = 0;
@@ -13834,7 +14105,6 @@ const VALUE_PLAYERS = [
   {n:"Trey Yesavage",     tm:"TOR",pos:"SP",  val:12,sb:0, sv:0, ba:null,hr:null,r:null,sig:"ROLE", why:"IL to start (shoulder). Elite stuff. Returns April. Buy cheap, use IL slot."},
   {n:"George Kirby",      tm:"SEA",pos:"SP",  val:16,sb:0, sv:0, ba:null,hr:null,r:null,sig:"FLOOR",why:"Quiet durable workhorse. Best K-BB rate of available mid-tier SP."},
   {n:"Sonny Gray",        tm:"BOS",pos:"SP",  val:24,sb:0, sv:0, ba:null,hr:null,r:null,sig:"UGLY", why:"STRONG BUY — ERA 4.30 scared room; xFIP 2.89 ranked 5th in baseball over 2 years."},
-,
   // ── $1-$3 SLEEPERS (verified available, all 12 rosters checked) ──────────
   {n:"TJ Rumfield",       tm:"COL",pos:"1B",  val:2,  sb:4, sv:0, ba:.265,hr:14, r:55, sig:"SLEEP",pri:"$1", why:"COL Opening Day 1B. .913 spring OPS, 1 K in 58 PA. Coors every day. Room has never heard of him. $1."},
   {n:"Andrew Vaughn",     tm:"MIL",pos:"1B",  val:3,  sb:4, sv:0, ba:.270,hr:20, r:68, sig:"SLEEP",pri:"$2", why:"ZiPS BOOM — creator says wRC+ 142 at MIL is closer to reality than projections suggest. Brewers unlock these guys. ADP 250+. $2."},
@@ -13965,9 +14235,10 @@ function renderValueLayer() {
   </div>`;
 
   // Filter row
+  const initFilter = state.posFilter === 'SLEEP' ? 'SLEEP' : 'ALL';
   h += `<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:.75rem;" id="vl-filters">
     ${["ALL","SB","SV","BA","SP","UGLY","FLOOR","ROLE","SPECL","BREAK","SLEEP"].map((f,i)=>
-      `<button class="fb${i===0?' fa':''}" onclick="vlFilter('${f}',this)">${f}</button>`
+      `<button class="fb${f===initFilter?' fa':''}" onclick="vlFilter('${f}',this)">${f}</button>`
     ).join('')}
   </div>`;
 
